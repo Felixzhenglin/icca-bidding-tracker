@@ -16,7 +16,7 @@ def update_feishu_table():
     app_token = "G1kybHcb7ajRwLscJJBcfQbhncf"
     table_id = "tblkAj8VMvK90PnY"
     
-    print(f"正在更新飞书表格：{app_token}/{table_id}")
+    print(f"正在更新飞书表格: {app_token}/{table_id}")
     
     try:
         # 获取 tenant_access_token
@@ -54,12 +54,12 @@ def update_feishu_table():
         # 示例：更新"最后更新时间"字段
         from datetime import datetime
         update_time = datetime.now().isoformat()
-        print(f"最后更新时间：{update_time}")
+        print(f"最后更新时间: {update_time}")
         
         return True
         
     except Exception as e:
-        print(f"更新出错：{e}")
+        print(f"更新出错: {e}")
         import traceback
         traceback.print_exc()
         return False

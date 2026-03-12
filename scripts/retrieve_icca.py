@@ -65,7 +65,7 @@ def retrieve_icca_bid_wins():
         return meetings
         
     except Exception as e:
-        print(f"检索出错：{e}")
+        print(f"检索出错: {e}")
         return []
 
 if __name__ == "__main__":
